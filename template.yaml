@@ -1,4 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
+Description: aws-network-basic cfn tutorial.
 Resources:
   MyVPC:
     Type: AWS::EC2::VPC
