@@ -5,6 +5,12 @@
 
 ### NOTE
 - Chapter.2 ネットワークを構築する
+    - [AWS::EC2::VPC - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpc.html)
+        - CidrBlock required.
+        - デフォルト値が入っているものはどうする？ドリフト検知用に指定した方が良い？
+        - Tags: Nameは入れておく方が管理画面で見やすい
+    - [AWS::EC2::Subnet - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html)
+        - CidrBlock, VpcId required.
 - Chapter.3 サーバーを構築する
 - Chapter.4 Web サーバーソフトをインストールする
 - Chapter.6 プライベートサブネットを構築する
