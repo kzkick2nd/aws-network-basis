@@ -52,6 +52,11 @@
     - [Amazon Elastic Block Store ブロックデバイスプロパティ - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-blockdev-template.html)
         - ブロックデバイスの詳細設定
         - TagsのName追加はできないらしい
+    - [AWS::EC2::EIP - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-eip.html)
+        - Elastic IP を作成し紐付け
+        - VPCを利用する場合は DependsOn を指定すること
+        - 既存のEIPを紐付けるなら [AWS::EC2::EIPAssociation - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-eip-association.html)
+
 - Chapter.4 Web サーバーソフトをインストールする
 - Chapter.6 プライベートサブネットを構築する
 - Chapter.7 NATを構築する

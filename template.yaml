@@ -82,3 +82,9 @@ Resources:
       Tags:
         - Key: Name
           Value: "Web Server"
+  MyEIP:
+    Type: AWS::EC2::EIP
+    DependsOn: MyVPC
+    Properties:
+      InstanceId: !Ref MyInstance
+      Domain: vpc
