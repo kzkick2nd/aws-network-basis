@@ -39,6 +39,19 @@
         - CidrIp, IpProtocol required.
         - FromPort, ToPortで設定
         - 0.0.0.0/0 全てのIP
+        - Egressは設定しなければ全開放
+    - [AWS::EC2::Instance - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-instance.html)
+        - さすがに設定項目豊富だな
+        - KeyName キーペアは既存の物を使わないとか？
+            - 事前に作成したものだけ利用可能っぽい
+    - [AWS::EC2::NetworkInterface - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-network-interface.html)
+        - ネットワーク設定
+        - GroupSetは文字列リスト型で指定
+    - [Amazon EC2 ブロックデバイスマッピングプロパティ - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-blockdev-mapping.html)
+        - ブロックデバイスのマッピング
+    - [Amazon Elastic Block Store ブロックデバイスプロパティ - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-blockdev-template.html)
+        - ブロックデバイスの詳細設定
+        - TagsのName追加はできないらしい
 - Chapter.4 Web サーバーソフトをインストールする
 - Chapter.6 プライベートサブネットを構築する
 - Chapter.7 NATを構築する

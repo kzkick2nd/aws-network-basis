@@ -60,3 +60,25 @@ Resources:
           FromPort: 22
           ToPort: 22
       VpcId: !Ref MyVPC
+  MyInstance:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      ImageId: "ami-0a2de1c3b415889d2"
+      InstanceType: "t2.micro"
+      KeyName: "MyKeypair"
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: true
+          DeviceIndex: 0
+          DeleteOnTermination: true
+          PrivateIpAddress: 10.0.1.10
+          SubnetId: !Ref MyPublicSubnet
+          GroupSet:
+            - !Ref MySecurityGroup
+      BlockDeviceMappings:
+        - DeviceName: "/dev/xvda"
+          Ebs:
+            VolumeType: "standard"
+            VolumeSize: 8
+      Tags:
+        - Key: Name
+          Value: "Web Server"
