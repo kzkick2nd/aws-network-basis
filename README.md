@@ -12,13 +12,23 @@
     - [AWS::EC2::Subnet - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html)
         - CidrBlock, VpcId required.
         - VpcId: !Ref MyVPC、論理ID？は具体的に何を見ている？
-            - Resource 名
+            - リソースの論理名、パラメーターの論理名
     - [AWS::EC2::InternetGateway - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-internetgateway.html)
         - no param required.
         - VPC に attach して使う
     - [AWS::EC2::VPCGatewayAttachment - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpc-gateway-attachment.html)
         - VpcId required.
         - InternetGatewayId or VpnGatewayId required.
+    - [AWS::EC2::RouteTable - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route-table.html)
+        - VpcId required.
+        - ルートテーブルの作成、ルートを追加して使う
+    - [AWS::EC2::Route - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-route.html)
+        - DestinationCidrBlock他, GatewayId他, RouteTableId required.
+        - ルートテーブルに追加するルート
+        - DependsOn属性 指定したリソース作成後に実行する?
+    - [AWS::EC2::SubnetRouteTableAssociation - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet-route-table-assoc.html)
+        - RouteTableId, SubnetId
+        - サブネットをルートテーブルに紐付ける
 
 - Chapter.3 サーバーを構築する
 - Chapter.4 Web サーバーソフトをインストールする

@@ -6,24 +6,43 @@ Resources:
     Properties:
       CidrBlock: 10.0.0.0/16
       Tags:
-          - Key: "Name"
-            Value: "MyVPC"
-  PublicSubnet:
+        - Key: "Name"
+          Value: "MyVPC"
+  MyPublicSubnet:
     Type: AWS::EC2::Subnet
     Properties:
       CidrBlock: 10.0.1.0/24
       VpcId: !Ref MyVPC
       Tags:
-          - Key: "Name"
-            Value: "MyPublicSubnet"
+        - Key: "Name"
+          Value: "MyPublicSubnet"
   MyGateway:
     Type: AWS::EC2::InternetGateway
     Properties:
       Tags:
-          - Key: "Name"
-            Value: "MyInternetGateway"
+        - Key: "Name"
+          Value: "MyInternetGateway"
   AttachGateway:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
       InternetGatewayId: !Ref MyGateway
       VpcId: !Ref MyVPC
+  MyRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref MyVPC
+      Tags:
+        - Key: "Name"
+          Value: "MyRouteTable"
+  MyRoute:
+    Type: "AWS::EC2::Route"
+    DependsOn: AttachGateway
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref MyGateway
+      RouteTableId: !Ref MyRouteTable
+  MySubnetRouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      RouteTableId: !Ref MyRouteTable
+      SubnetId: !Ref MyPublicSubnet
