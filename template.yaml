@@ -1,6 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: aws-network-basic cfn tutorial.
+Description: aws-network-basis cfn tutorial.
 Resources:
+  # 第二章
   MyVPC:
     Type: AWS::EC2::VPC
     Properties:
@@ -46,3 +47,16 @@ Resources:
     Properties:
       RouteTableId: !Ref MyRouteTable
       SubnetId: !Ref MyPublicSubnet
+  # 第三章
+  MySecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupName: "WEB-SG"
+      GroupDescription: "aws-network-basis SecurityGroup"
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          Description: "SSH"
+          IpProtocol: "tcp"
+          FromPort: 22
+          ToPort: 22
+      VpcId: !Ref MyVPC

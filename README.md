@@ -31,6 +31,14 @@
         - サブネットをルートテーブルに紐付ける
 
 - Chapter.3 サーバーを構築する
+    - [AWS::EC2::SecurityGroup - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group.html)
+        - EC2セキュリティグループをつくる。
+        - GroupDescription, VpcId required.
+    - [EC2 セキュリティグループルールのプロパティタイプ - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group-rule.html)
+        - セキュリティグループのルール概要
+        - CidrIp, IpProtocol required.
+        - FromPort, ToPortで設定
+        - 0.0.0.0/0 全てのIP
 - Chapter.4 Web サーバーソフトをインストールする
 - Chapter.6 プライベートサブネットを構築する
 - Chapter.7 NATを構築する
