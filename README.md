@@ -11,6 +11,15 @@
         - Tags: Nameは入れておく方が管理画面で見やすい
     - [AWS::EC2::Subnet - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-subnet.html)
         - CidrBlock, VpcId required.
+        - VpcId: !Ref MyVPC、論理ID？は具体的に何を見ている？
+            - Resource 名
+    - [AWS::EC2::InternetGateway - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-internetgateway.html)
+        - no param required.
+        - VPC に attach して使う
+    - [AWS::EC2::VPCGatewayAttachment - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpc-gateway-attachment.html)
+        - VpcId required.
+        - InternetGatewayId or VpnGatewayId required.
+
 - Chapter.3 サーバーを構築する
 - Chapter.4 Web サーバーソフトをインストールする
 - Chapter.6 プライベートサブネットを構築する

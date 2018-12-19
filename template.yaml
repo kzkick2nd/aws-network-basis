@@ -16,3 +16,14 @@ Resources:
       Tags:
           - Key: "Name"
             Value: "MyPublicSubnet"
+  MyGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+          - Key: "Name"
+            Value: "MyInternetGateway"
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref MyGateway
+      VpcId: !Ref MyVPC
