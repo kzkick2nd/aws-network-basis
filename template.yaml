@@ -88,10 +88,36 @@ Resources:
       Tags:
         - Key: Name
           Value: "Web Server"
+      # 第四章 Metadata 内容をインストールするらしい
+      UserData:
+        Fn::Base64:
+          !Sub |
+            #!/bin/bash -xe
+            yum install -y aws-cfn-bootstrap
+            /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource MyInstance --configsets Install --region ${AWS::Region}
+            /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource MyInstance --region ${AWS::Region}
+    # 第四章 インストール内容
+    Metadata:
+      Comment1: chapter4 install httpd
+      AWS::CloudFormation::Init:
+        configSets:
+          Install:
+            - Install
+        Install:
+          packages:
+            yum:
+              httpd: []
+          services:
+            sysvinit:
+              httpd:
+                enable: true
+                ensureRunning: true
+    CreationPolicy:
+      ResourceSignal:
+        Timeout: PT5M
   MyEIP:
     Type: AWS::EC2::EIP
     DependsOn: MyVPC
     Properties:
       InstanceId: !Ref MyInstance
       Domain: vpc
-  # 第四章
