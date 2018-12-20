@@ -61,3 +61,12 @@
 - Chapter.6 プライベートサブネットを構築する
 - Chapter.7 NATを構築する
 - Chapter.8 DB を用いたブログシステムの構築
+
+
+### MEMO
+- yamlファイルどこに置いておくのが良いのだろう？S3？
+- スタック内容更新はどうやっていくのだろう？
+    - [AWS CloudFormation スタックの更新 - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks.html)
+    - template ファイル上書きやエディターでの更新ができる
+        - 差分詳細はわからないの？
+- CFnを使うとネットワーク周りを考えてから中身を考える順序が自然になる
