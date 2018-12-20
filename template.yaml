@@ -59,6 +59,11 @@ Resources:
           IpProtocol: "tcp"
           FromPort: 22
           ToPort: 22
+        - CidrIp: 0.0.0.0/0
+          Description: "HTTP"
+          IpProtocol: "tcp"
+          FromPort: 80
+          ToPort: 80
       VpcId: !Ref MyVPC
   MyInstance:
     Type: "AWS::EC2::Instance"
@@ -88,3 +93,4 @@ Resources:
     Properties:
       InstanceId: !Ref MyInstance
       Domain: vpc
+  # 第四章
