@@ -58,6 +58,21 @@
         - 既存のEIPを紐付けるなら [AWS::EC2::EIPAssociation - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-eip-association.html)
 
 - Chapter.4 Web サーバーソフトをインストールする
+    - CFnで作業はできるが、適性範囲を超えている気はする。
+    - [CloudFormation ヘルパースクリプトリファレンス - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/cfn-helper-scripts-reference.html)
+    - [Fn::Sub - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-sub.html)
+    - rhel7系では動かないルールがありそうな気配。
+
 - Chapter.6 プライベートサブネットを構築する
 - Chapter.7 NATを構築する
 - Chapter.8 DB を用いたブログシステムの構築
+
+### MEMO
+- yamlファイルどこに置いておくのが良いのだろう？S3？
+- スタック内容更新はどうやっていくのだろう？
+    - [AWS CloudFormation スタックの更新 - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks.html)
+    - template ファイル上書きやエディターでの更新ができる
+        - 差分詳細はわからないの？
+- CFnを使うとネットワーク周りを考えてから中身を考える順序が自然になる
+- EC2が停止してもそれはdriftではないらしい
+- ドキュメントで「更新に伴う要件」と書いてあるのが更新時の挙動らしい
