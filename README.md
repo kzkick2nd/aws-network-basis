@@ -63,6 +63,14 @@
     - [Fn::Sub - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-sub.html)
     - rhel7系では動かないルールがありそうな気配。
 
+- Chapter.5 HTTPの動きを確認する
+    - node.jsをインストール Chapter.4のおさらい
+        - シェルスクリプト中 sudo 使える。IAM とか権限どうなんだろう？
+        - 8080 ポート開ける
+    - `app.js`を動かしてみる
+    - サンプルコードは6系 `curl -sL https://rpm.nodesource.com/setup_6.x | bash -`
+    - そういえば telnet 最近 macOS に入ってない。
+
 - Chapter.6 プライベートサブネットを構築する
 - Chapter.7 NATを構築する
 - Chapter.8 DB を用いたブログシステムの構築
