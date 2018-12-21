@@ -74,7 +74,7 @@ Resources:
       KeyName: "MyKeypair"
       NetworkInterfaces:
         - AssociatePublicIpAddress: true
-          DeviceIndex: 0
+          DeviceIndex: "0"
           DeleteOnTermination: true
           PrivateIpAddress: 10.0.1.10
           SubnetId: !Ref MyPublicSubnet

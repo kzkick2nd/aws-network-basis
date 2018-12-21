@@ -76,3 +76,8 @@
 - CFnを使うとネットワーク周りを考えてから中身を考える順序が自然になる
 - EC2が停止してもそれはdriftではないらしい
 - ドキュメントで「更新に伴う要件」と書いてあるのが更新時の挙動らしい
+- ドキュメント項目多すぎて調べにくい
+- 公式リンター・文法チェック [awslabs/cfn-python-lint: CloudFormation Linter](https://github.com/awslabs/cfn-python-lint)
+
+### 参考ブログ
+- [【CloudFormation入門1】5分と6行で始めるAWS CloudFormationテンプレートによるインフラ構築 ｜ DevelopersIO](https://dev.classmethod.jp/cloud/aws/cloudformation-beginner01/)
