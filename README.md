@@ -72,6 +72,8 @@
     - そういえば telnet 最近 macOS に入ってない。
 
 - Chapter.6 プライベートサブネットを構築する
+    - EC2 と追加で RDS もプライベートサブネットに設置してみる。
+    - MyPrivateSubnet のルートテーブルはデフォルトのままでOK。
 - Chapter.7 NATを構築する
 - Chapter.8 DB を用いたブログシステムの構築
 
@@ -86,6 +88,7 @@
 - ドキュメントで「更新に伴う要件」と書いてあるのが更新時の挙動らしい
 - ドキュメント項目多すぎて調べにくい
 - 公式リンター・文法チェック [awslabs/cfn-python-lint: CloudFormation Linter](https://github.com/awslabs/cfn-python-lint)
+- シェルスクリプトを実行するあたりで、例えば S3 のマウントとか作業があればやってしまっても良いかもしれない。
 
 ### 参考ブログ
 - [【CloudFormation入門1】5分と6行で始めるAWS CloudFormationテンプレートによるインフラ構築 ｜ DevelopersIO](https://dev.classmethod.jp/cloud/aws/cloudformation-beginner01/)
