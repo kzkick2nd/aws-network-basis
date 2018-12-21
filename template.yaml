@@ -65,6 +65,12 @@ Resources:
           IpProtocol: "tcp"
           FromPort: 80
           ToPort: 80
+        # 第五章 node.js サーバー
+        - CidrIp: 0.0.0.0/0
+          Description: "node.js server"
+          IpProtocol: "tcp"
+          FromPort: 8080
+          ToPort: 8080
       VpcId: !Ref MyVPC
   MyInstance:
     Type: "AWS::EC2::Instance"
@@ -96,6 +102,9 @@ Resources:
             yum install -y aws-cfn-bootstrap
             /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource MyInstance --configsets Install --region ${AWS::Region}
             /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource MyInstance --region ${AWS::Region}
+            # 第五章 node.js サーバー
+            curl -sL https://rpm.nodesource.com/setup_6.x | sudo bash -
+            sudo yum install -y nodejs
     # 第四章 インストール内容
     Metadata:
       Comment1: chapter4 install httpd
