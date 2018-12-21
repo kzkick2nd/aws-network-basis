@@ -71,6 +71,11 @@ Resources:
           IpProtocol: "tcp"
           FromPort: 8080
           ToPort: 8080
+        - CidrIp: 0.0.0.0/0
+          Description: "ICMP"
+          IpProtocol: "icmp"
+          FromPort: -1
+          ToPort: -1
       VpcId: !Ref MyVPC
   MyInstance:
     Type: "AWS::EC2::Instance"
@@ -130,3 +135,57 @@ Resources:
     Properties:
       InstanceId: !Ref MyInstance
       Domain: vpc
+
+  # 第六章 プライベートサブネット
+  MyPrivateSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.2.0/24
+      VpcId: !Ref MyVPC
+      Tags:
+        - Key: "Name"
+          Value: "MyPrivateSubnet"
+  MyPrivateInstance:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      ImageId: "ami-0a2de1c3b415889d2"
+      InstanceType: "t2.micro"
+      KeyName: "MyKeypair"
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: false
+          DeviceIndex: "0"
+          DeleteOnTermination: true
+          PrivateIpAddress: 10.0.2.10
+          SubnetId: !Ref MyPrivateSubnet
+          GroupSet:
+            - !Ref MyPrivateSecurityGroup
+      BlockDeviceMappings:
+        - DeviceName: "/dev/xvda"
+          Ebs:
+            VolumeType: "standard"
+            VolumeSize: 8
+      Tags:
+        - Key: Name
+          Value: "DB Server"
+  MyPrivateSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupName: "DB-SG"
+      GroupDescription: "aws-network-basis DB SecurityGroup"
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          Description: "SSH"
+          IpProtocol: "tcp"
+          FromPort: 22
+          ToPort: 22
+        - CidrIp: 0.0.0.0/0
+          Description: "RDBMS"
+          IpProtocol: "tcp"
+          FromPort: 3306
+          ToPort: 3306
+        - CidrIp: 0.0.0.0/0
+          Description: "ICMP"
+          IpProtocol: "icmp"
+          FromPort: -1
+          ToPort: -1
+      VpcId: !Ref MyVPC
