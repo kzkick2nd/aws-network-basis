@@ -182,7 +182,7 @@ Resources:
           IpProtocol: "tcp"
           FromPort: 22
           ToPort: 22
-        - CidrIp: 0.0.0.0/0
+        - SourceSecurityGroupId: !Ref MySecurityGroup
           Description: "RDBMS"
           IpProtocol: "tcp"
           FromPort: 3306
@@ -229,3 +229,46 @@ Resources:
       Tags:
         - Key: Name
           Value: MyNAT
+
+  # 第八章改 RDSを組み込む
+  MyDBSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.3.0/24
+      VpcId: !Ref MyVPC
+      AvailabilityZone: ap-northeast-1a
+      Tags:
+        - Key: "Name"
+          Value: "MyDBSubnet1"
+  MyDBSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.4.0/24
+      VpcId: !Ref MyVPC
+      AvailabilityZone: ap-northeast-1d
+  MyDBSubnetGroup:
+    Type: "AWS::RDS::DBSubnetGroup"
+    Properties:
+      DBSubnetGroupName: MyDBSubnet
+      DBSubnetGroupDescription: description
+      SubnetIds:
+        - !Ref MyDBSubnet1
+        - !Ref MyDBSubnet2
+  MyDB:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBName: MyRDS
+      AllocatedStorage: '20'
+      DBInstanceClass: db.t2.micro
+      Engine: MySQL
+      MasterUsername: DBUser
+      MasterUserPassword: DBPassword # パスワード注意
+      DBSubnetGroupName: !Ref MyDBSubnetGroup
+      VPCSecurityGroups:
+        - !GetAtt
+          - MyPrivateSecurityGroup
+          - GroupId
+      Tags:
+        - Key: "Name"
+          Value: "My SQL Database"
+    DeletionPolicy: Snapshot # スナップショット注意
