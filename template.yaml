@@ -15,6 +15,7 @@ Resources:
     Properties:
       CidrBlock: 10.0.1.0/24
       VpcId: !Ref MyVPC
+      AvailabilityZone: ap-northeast-1d
       Tags:
         - Key: "Name"
           Value: "MyPublicSubnet"
@@ -83,6 +84,7 @@ Resources:
       ImageId: "ami-0a2de1c3b415889d2"
       InstanceType: "t2.micro"
       KeyName: "MyKeypair"
+      AvailabilityZone: ap-northeast-1d
       NetworkInterfaces:
         - AssociatePublicIpAddress: true
           DeviceIndex: "0"
@@ -142,6 +144,7 @@ Resources:
     Properties:
       CidrBlock: 10.0.2.0/24
       VpcId: !Ref MyVPC
+      AvailabilityZone: ap-northeast-1d
       Tags:
         - Key: "Name"
           Value: "MyPrivateSubnet"
@@ -151,6 +154,7 @@ Resources:
       ImageId: "ami-0a2de1c3b415889d2"
       InstanceType: "t2.micro"
       KeyName: "MyKeypair"
+      AvailabilityZone: ap-northeast-1d
       NetworkInterfaces:
         - AssociatePublicIpAddress: false
           DeviceIndex: "0"
