@@ -15,6 +15,7 @@ Resources:
     Properties:
       CidrBlock: 10.0.1.0/24
       VpcId: !Ref MyVPC
+      AvailabilityZone: ap-northeast-1d
       Tags:
         - Key: "Name"
           Value: "MyPublicSubnet"
@@ -83,6 +84,7 @@ Resources:
       ImageId: "ami-0a2de1c3b415889d2"
       InstanceType: "t2.micro"
       KeyName: "MyKeypair"
+      AvailabilityZone: ap-northeast-1d
       NetworkInterfaces:
         - AssociatePublicIpAddress: true
           DeviceIndex: "0"
@@ -130,8 +132,8 @@ Resources:
       ResourceSignal:
         Timeout: PT5M
   MyEIP:
-    Type: AWS::EC2::EIP
     DependsOn: MyVPC
+    Type: AWS::EC2::EIP
     Properties:
       InstanceId: !Ref MyInstance
       Domain: vpc
@@ -142,6 +144,7 @@ Resources:
     Properties:
       CidrBlock: 10.0.2.0/24
       VpcId: !Ref MyVPC
+      AvailabilityZone: ap-northeast-1d
       Tags:
         - Key: "Name"
           Value: "MyPrivateSubnet"
@@ -151,6 +154,7 @@ Resources:
       ImageId: "ami-0a2de1c3b415889d2"
       InstanceType: "t2.micro"
       KeyName: "MyKeypair"
+      AvailabilityZone: ap-northeast-1d
       NetworkInterfaces:
         - AssociatePublicIpAddress: false
           DeviceIndex: "0"
@@ -189,3 +193,39 @@ Resources:
           FromPort: -1
           ToPort: -1
       VpcId: !Ref MyVPC
+
+  # 第7章 NATゲートウェイ用ルートテーブル
+  MyPrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref MyVPC
+      Tags:
+        - Key: "Name"
+          Value: "MyPrivateRouteTable"
+  MyPrivateRoute:
+    DependsOn: AttachGateway
+    Type: "AWS::EC2::Route"
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref MyNAT
+      RouteTableId: !Ref MyPrivateRouteTable
+  MyPrivateSubnetRouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      RouteTableId: !Ref MyPrivateRouteTable
+      SubnetId: !Ref MyPrivateSubnet
+  # NATゲートウェイ用 EIP
+  NATEIP:
+    DependsOn: MyVPC
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+  MyNAT:
+    DependsOn: AttachGateway
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NATEIP.AllocationId
+      SubnetId: !Ref MyPublicSubnet
+      Tags:
+        - Key: Name
+          Value: MyNAT
