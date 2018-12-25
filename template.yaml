@@ -230,7 +230,7 @@ Resources:
         - Key: Name
           Value: MyNAT
 
-  # 第八章改 RDSを組み込む
+  # 第八章改 VPC 内に RDS を組み込む
   MyDBSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
@@ -258,6 +258,7 @@ Resources:
     Type: AWS::RDS::DBInstance
     Properties:
       DBName: MyRDS
+      DBInstanceIdentifier: myrds
       AllocatedStorage: '20'
       DBInstanceClass: db.t2.micro
       Engine: MySQL
@@ -268,7 +269,4 @@ Resources:
         - !GetAtt
           - MyPrivateSecurityGroup
           - GroupId
-      Tags:
-        - Key: "Name"
-          Value: "My SQL Database"
     DeletionPolicy: Snapshot # スナップショット注意
