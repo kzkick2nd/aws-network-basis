@@ -130,8 +130,8 @@ Resources:
       ResourceSignal:
         Timeout: PT5M
   MyEIP:
-    Type: AWS::EC2::EIP
     DependsOn: MyVPC
+    Type: AWS::EC2::EIP
     Properties:
       InstanceId: !Ref MyInstance
       Domain: vpc
@@ -189,3 +189,39 @@ Resources:
           FromPort: -1
           ToPort: -1
       VpcId: !Ref MyVPC
+
+  # 第7章 NATゲートウェイ用ルートテーブル
+  MyPrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref MyVPC
+      Tags:
+        - Key: "Name"
+          Value: "MyPrivateRouteTable"
+  MyPrivateRoute:
+    DependsOn: AttachGateway
+    Type: "AWS::EC2::Route"
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref MyNAT
+      RouteTableId: !Ref MyPrivateRouteTable
+  MyPrivateSubnetRouteTableAssociation:
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Properties:
+      RouteTableId: !Ref MyPrivateRouteTable
+      SubnetId: !Ref MyPrivateSubnet
+  # NATゲートウェイ用 EIP
+  NATEIP:
+    DependsOn: MyVPC
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+  MyNAT:
+    DependsOn: AttachGateway
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NATEIP.AllocationId
+      SubnetId: !Ref MyPrivateSubnet
+      Tags:
+        - Key: Name
+          Value: MyNAT

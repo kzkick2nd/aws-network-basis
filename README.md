@@ -82,10 +82,17 @@
     - [ ] ssh-agent 経由で多段アクセスしてみる
 
 - Chapter.7 NATを構築する
-    - ch6状態だとDBサーバーはパッケージインストールできない？
+    - Ch6状態でネット未接続。DBサーバーはパッケージインストールできない？
         - yum info 無理 OK
         - lsof -i -n -P 確認 OK
-    - 新規起動したらアベイラビリティゾーンがバラついた。
+    - 新規起動したらEC2のAZがバラつく
+        - [ ] AZ指定
+    - [AWS::EC2::NatGateway - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-natgateway.html)
+        - 専用 EIP と所属 SubnetId を指定
+    - [Fn::GetAtt - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-getatt.html)
+        - 対象リソースから指定した属性値を取得する
+        - 短縮 `!GetAtt logicalNameOfResource.attributeName`
+    - [ ] 疎通確認
 
 - Chapter.8 DB を用いたブログシステムの構築
 
@@ -101,6 +108,7 @@
 - ドキュメント項目多すぎて調べにくい
 - 公式リンター・文法チェック [awslabs/cfn-python-lint: CloudFormation Linter](https://github.com/awslabs/cfn-python-lint)
 - シェルスクリプトを実行するあたりで、例えば S3 のマウントとか作業があればやってしまっても良いかもしれない。
+- リソース属性値のデバッグどうすればええんや？
 
 ### 参考ブログ
 - [【CloudFormation入門1】5分と6行で始めるAWS CloudFormationテンプレートによるインフラ構築 ｜ DevelopersIO](https://dev.classmethod.jp/cloud/aws/cloudformation-beginner01/)
