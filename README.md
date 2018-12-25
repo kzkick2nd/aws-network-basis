@@ -98,6 +98,39 @@
         - yum info , curl
 
 - Chapter.8 DB を用いたブログシステムの構築
+    - 7章までのDB用インスタンスではなく、RDSを配置して利用する
+    - 何か経由で固定IPをRDSに通す
+    - [AWS::RDS::DBInstance - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-properties-rds-database-instance.html)
+        - EC2Instance 並に項目が多いリソース。
+        - Required / Conditional
+            - AllocatedStorage
+            - DBInstanceClass
+            - Engine
+            - Iops (io1 only)
+            - MasterUsername
+            - MasterUserPassword
+            - MonitoringInterval
+            - MonitoringRoleArn
+            - StorageEncrypted
+        - DeletionPolicy
+            - スタック削除時の動作。本番環境ではSnapshotで再利用がベター？
+        - Tag Name ではなく DBName を使う
+        - VPCSecurityGroups と DBSecurityGroups
+        - [Amazon RDS セキュリティグループによるアクセスの制御 - Amazon Relational Database Service](https://docs.aws.amazon.com/ja_jp/AmazonRDS/latest/UserGuide/Overview.RDSSecurityGroups.html)
+            - プラクティスが古い（DBSecurityGroups利用）
+            - VPCSecurityGroupsを利用しておけばとりあえずOK
+        - timezoneとかもここで指定できる
+        - dbの表示名は DBInstanceIdentifier
+    - EC2 サブネットと RDS サブネットは別？
+        - EC2::Subnet を利用する点は同じ
+        - 紐付ける RDS::DBSubnetGroup がRDS専用
+    - VPCを指定したいとき直接VPCが指定できない。SubnetGroupからつくる。
+        - Subnetを2つつくる(VPC指定, AZ複数必須)
+            - どのくらいアドレス割り当てるといいのかね？
+            - EC2::SubnetなのでEC2と共有しても良い。
+        - SubnetGroupをつくる（↑2つを紐付け）
+            - [AWS::RDS::DBSubnetGroup - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbsubnet-group.html)
+        - RDS::DBInstance の DBSubnetGroupNameに指定する
 
 ### MEMO
 - yamlファイルどこに置いておくのが良いのだろう？S3？
@@ -115,6 +148,15 @@
 - EIP を維持したまま Replace 更新すると失敗する。付け替え不能。
 - EIP の Tag Name 設定したいが。
 - CIDR 名前の由来
+- ${EnvName} 環境変数的な物がとれるらしい?
+- LAMPベストプラクティスで LaunchConfiguration なるリソースを利用して bootstrap してる
+- バリデーション以上につくらないと動作わからない。
+    - しかし何度もつくって試すのめんどい
+    - 公式のコレが使えるらしい [aws-quickstart/taskcat: Test all the CloudFormation things! (with TaskCat)](https://github.com/aws-quickstart/taskcat)
+- EC2::Subnet 存在すると作成できないで停止する
+    - 使い回すとか気を利かせる機能ではなく、つくるかつかうか。
+    - 名前衝突する
+    - 名前衝突はテンプレ変数で回避できそう？
 
 ### 参考ブログ
 - [【CloudFormation入門1】5分と6行で始めるAWS CloudFormationテンプレートによるインフラ構築 ｜ DevelopersIO](https://dev.classmethod.jp/cloud/aws/cloudformation-beginner01/)
