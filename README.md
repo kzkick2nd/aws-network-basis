@@ -170,6 +170,7 @@
     - 名前衝突する
     - 名前衝突はテンプレ変数で回避できそう？
 - スタック更新は ChangeSet という仮実行手順を利用する。
+- リソース論理IDとTagNameは違うので、論理IDはtemplate内部の役割で命名する
 
 ### 参考ブログ
 - [【CloudFormation入門1】5分と6行で始めるAWS CloudFormationテンプレートによるインフラ構築 ｜ DevelopersIO](https://dev.classmethod.jp/cloud/aws/cloudformation-beginner01/)

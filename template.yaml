@@ -1,5 +1,20 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: aws-network-basis cfn tutorial.
+Parameters:
+    ParamDBPassword:
+      NoEcho: true
+      Description: The database admin account password
+      Type: String
+      MinLength: 1
+      MaxLength: 41
+      AllowedPattern: ^[a-zA-Z0-9]*$
+    ParamDBUserId:
+      Description: The database admin account id
+      Type: String
+      MinLength: 1
+      MaxLength: 41
+      AllowedPattern: ^[a-zA-Z0-9]*$
+
 Resources:
   # 第二章
   MyVPC:
@@ -262,11 +277,10 @@ Resources:
       AllocatedStorage: '20'
       DBInstanceClass: db.t2.micro
       Engine: MySQL
-      MasterUsername: DBUser
-      MasterUserPassword: DBPassword # パスワード注意
+      MasterUsername: !Ref ParamDBUserId
+      MasterUserPassword: !Ref ParamDBPassword
       DBSubnetGroupName: !Ref MyDBSubnetGroup
       VPCSecurityGroups:
         - !GetAtt
-          - MyPrivateSecurityGroup
-          - GroupId
+          [ MyPrivateSecurityGroup, GroupId]
     DeletionPolicy: Snapshot # スナップショット注意
