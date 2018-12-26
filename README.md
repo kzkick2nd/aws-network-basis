@@ -114,6 +114,7 @@
             - StorageEncrypted
         - DeletionPolicy
             - スタック削除時の動作。本番環境ではSnapshotで再利用がベター？
+            - 削除時に毎回バックアップつくるから重いので開発時は外すのが良さそう
         - Tag Name ではなく DBName を使う
         - VPCSecurityGroups と DBSecurityGroups
         - [Amazon RDS セキュリティグループによるアクセスの制御 - Amazon Relational Database Service](https://docs.aws.amazon.com/ja_jp/AmazonRDS/latest/UserGuide/Overview.RDSSecurityGroups.html)
@@ -131,6 +132,8 @@
         - SubnetGroupをつくる（↑2つを紐付け）
             - [AWS::RDS::DBSubnetGroup - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbsubnet-group.html)
         - RDS::DBInstance の DBSubnetGroupNameに指定する
+    - [x] 疎通確認  WebEC2 => MyRDS mysqlログイン OK
+    - [x] VPC外からアクセス不能 OK
 
 ### MEMO
 - yamlファイルどこに置いておくのが良いのだろう？S3？
