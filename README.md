@@ -137,6 +137,7 @@
 
 ### MEMO
 - yamlファイルどこに置いておくのが良いのだろう？S3？
+- 複数テンプレートに分けてもTemplateURLで参照できるらしい？
 - スタック内容更新はどうやっていくのだろう？
     - [AWS CloudFormation スタックの更新 - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks.html)
     - template ファイル上書きやエディターでの更新ができる
@@ -152,14 +153,23 @@
 - EIP の Tag Name 設定したいが。
 - CIDR 名前の由来
 - ${EnvName} 環境変数的な物がとれるらしい?
+    - Parameters: で宣言し、!Ref で呼び出し。
+    - !Sub "${AWS::StackName}-ops-iam-role" とすると変数埋め込み
+    - 疑似パラメーター例
+        - AWS::AccountId アカウントID
+        - AWS::Region リージョン文字列
+        - AWS::StackName スタック名称
+        - AWS::StackId スタックID
+        - AWS::NoValue 未定義値
 - LAMPベストプラクティスで LaunchConfiguration なるリソースを利用して bootstrap してる
 - バリデーション以上につくらないと動作わからない。
-    - しかし何度もつくって試すのめんどい
+    - しかし何度もつくって試すのめんどい => CLIでやるのが良いとか
     - 公式のコレが使えるらしい [aws-quickstart/taskcat: Test all the CloudFormation things! (with TaskCat)](https://github.com/aws-quickstart/taskcat)
 - EC2::Subnet 存在すると作成できないで停止する
     - 使い回すとか気を利かせる機能ではなく、つくるかつかうか。
     - 名前衝突する
     - 名前衝突はテンプレ変数で回避できそう？
+- スタック更新は ChangeSet という仮実行手順を利用する。
 
 ### 参考ブログ
 - [【CloudFormation入門1】5分と6行で始めるAWS CloudFormationテンプレートによるインフラ構築 ｜ DevelopersIO](https://dev.classmethod.jp/cloud/aws/cloudformation-beginner01/)
