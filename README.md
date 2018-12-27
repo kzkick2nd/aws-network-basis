@@ -171,6 +171,14 @@
     - 名前衝突はテンプレ変数で回避できそう？
 - スタック更新は ChangeSet という仮実行手順を利用する。
 - リソース論理IDとTagNameは違うので、論理IDはtemplate内部の役割で命名する
+- 複製可能にするためにはどうすればいいの？
+    - 論理IDは重複できる
+    - リソース名の属性パラメーターは重複できない
+    - VPCのCIDR範囲は重複しないように作る
+        - CIDR アドレスの一部だけParameters入力できる様にすれば？
+- DBNameは英数のみなので、StackName利用に注意
 
 ### 参考ブログ
 - [【CloudFormation入門1】5分と6行で始めるAWS CloudFormationテンプレートによるインフラ構築 ｜ DevelopersIO](https://dev.classmethod.jp/cloud/aws/cloudformation-beginner01/)
+- [AWS CloudFormation VPC テンプレート - AWS CodeBuild](https://docs.aws.amazon.com/ja_jp/codebuild/latest/userguide/cloudformation-vpc-template.html)
+- [ある程度の規模で運用するAWS CloudFormationの勘所 - Qiita](https://qiita.com/datake914/items/14cb4d66570c1efcbc7d#cloudformation%E3%81%AE%E9%81%A9%E7%94%A8%E7%AF%84%E5%9B%B2)
