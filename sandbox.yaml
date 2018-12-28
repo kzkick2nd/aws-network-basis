@@ -5,6 +5,22 @@ Parameters:
     Description: The alternative domain name of this distribution.
     Type: String
 Resources:
+  IAMAdmin:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: Admin
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+  IAMS3:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: S3Access
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+  MyS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: cfn-bucket-sample
   BastionInstance:
     Type: 'AWS::EC2::Instance'
     Properties:

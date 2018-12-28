@@ -180,6 +180,8 @@
 - EC2 InstanceInitiatedShutdownBehavior
     - シャットダウン時の動作モード Default: stop
 - EC2 削除保護の有効化 DisableApiTermination
+- S3 のストレージクラス指定どうやるん
+- ACM 無料証明書はCNAME設定するまで待機してくれる
 
 
 ### 参考ブログ
