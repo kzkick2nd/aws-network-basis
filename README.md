@@ -177,8 +177,13 @@
     - VPCのCIDR範囲は重複しないように作る
         - CIDR アドレスの一部だけParameters入力できる様にすれば？
 - DBNameは英数のみなので、StackName利用に注意
+- EC2 InstanceInitiatedShutdownBehavior
+    - シャットダウン時の動作モード Default: stop
+- EC2 削除保護の有効化 DisableApiTermination
+
 
 ### 参考ブログ
 - [【CloudFormation入門1】5分と6行で始めるAWS CloudFormationテンプレートによるインフラ構築 ｜ DevelopersIO](https://dev.classmethod.jp/cloud/aws/cloudformation-beginner01/)
 - [AWS CloudFormation VPC テンプレート - AWS CodeBuild](https://docs.aws.amazon.com/ja_jp/codebuild/latest/userguide/cloudformation-vpc-template.html)
 - [ある程度の規模で運用するAWS CloudFormationの勘所 - Qiita](https://qiita.com/datake914/items/14cb4d66570c1efcbc7d#cloudformation%E3%81%AE%E9%81%A9%E7%94%A8%E7%AF%84%E5%9B%B2)
+- [CloudFormationで削除保護をつけたEC2の作成と削除 ｜ DevelopersIO](https://dev.classmethod.jp/cloud/aws/creating_and_deleting_ec2_with_delete_protection_in_cloudformation/)
