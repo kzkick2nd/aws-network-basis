@@ -5,15 +5,15 @@ Parameters:
     Description: The CIDR range for this VPC. (x.x.0.0/16)
     Type: String
     Default: 10.0
-  ParamDBPassword:
-    NoEcho: true
-    Description: The database admin account password
+  DBAdmin:
+    Description: The database admin account id.
     Type: String
     MinLength: 1
     MaxLength: 41
     AllowedPattern: ^[a-zA-Z0-9]*$
-  ParamDBUserId:
-    Description: The database admin account id
+  DBPassword:
+    NoEcho: true
+    Description: The database admin account password.
     Type: String
     MinLength: 1
     MaxLength: 41
@@ -285,8 +285,8 @@ Resources:
       AllocatedStorage: '20'
       DBInstanceClass: db.t2.micro
       Engine: MySQL
-      MasterUsername: !Ref ParamDBUserId
-      MasterUserPassword: !Ref ParamDBPassword
+      MasterUsername: !Ref DBAdmin
+      MasterUserPassword: !Ref DBPassword
       DBSubnetGroupName: !Ref MyDBSubnetGroup
       VPCSecurityGroups:
         - !GetAtt

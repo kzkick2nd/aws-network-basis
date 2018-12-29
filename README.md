@@ -98,8 +98,9 @@
         - yum info , curl
 
 - Chapter.8 DB を用いたブログシステムの構築
-    - 7章までのDB用インスタンスではなく、RDSを配置して利用する
-    - 何か経由で固定IPをRDSに通す
+    - WPはインストールしない。
+    - 7章までのDB用インスタンスではなくRDSを配置してみる
+    - 伴ってNATも使わない
     - [AWS::RDS::DBInstance - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-properties-rds-database-instance.html)
         - EC2Instance 並に項目が多いリソース。
         - Required / Conditional
@@ -182,7 +183,10 @@
 - EC2 削除保護の有効化 DisableApiTermination
 - S3 のストレージクラス指定どうやるん
 - ACM 無料証明書はCNAME設定するまで待機してくれる
-
+- SG削除が依存性違反起こしてる
+    - RDS をretainするとこうなる
+- 分岐の書き方むずい
+    - [AWS CloudFormation and RDS Snapshots - Jason Antman's Blog](https://blog.jasonantman.com/2014/12/aws-cloudformation-and-rds-snapshots/)
 
 ### 参考ブログ
 - [【CloudFormation入門1】5分と6行で始めるAWS CloudFormationテンプレートによるインフラ構築 ｜ DevelopersIO](https://dev.classmethod.jp/cloud/aws/cloudformation-beginner01/)
