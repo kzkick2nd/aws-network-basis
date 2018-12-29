@@ -3,6 +3,15 @@
 
 参考：[AWS CloudFormation への入門に「Amazon Web Services 基礎からのネットワーク&サーバー構築」を使ってみた - えいのうにっき](https://blog.a-know.me/entry/2017/02/13/222100)
 
+### 進捗
+- [Chapter.2 ネットワークを構築する](https://github.com/kzkick2nd/aws-network-basis/pull/1)
+- [Chapter.3 サーバーを構築する](https://github.com/kzkick2nd/aws-network-basis/pull/2)
+- [Chapter.4 Web サーバーソフトをインストールする](https://github.com/kzkick2nd/aws-network-basis/pull/3)
+- [Chapter.5 HTTPの動きを確認する](https://github.com/kzkick2nd/aws-network-basis/pull/4)]
+- [Chapter.6 プライベートサブネットを構築する](https://github.com/kzkick2nd/aws-network-basis/pull/5)
+- [Chapter.7 NATを構築する](https://github.com/kzkick2nd/aws-network-basis/pull/6)
+- [Chapter.8 DB を用いたブログシステムの構築](https://github.com/kzkick2nd/aws-network-basis/pull/7)
+
 ### NOTE
 - Chapter.2 ネットワークを構築する
     - [AWS::EC2::VPC - AWS CloudFormation](https://docs.aws.amazon.com/ja_jp/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpc.html)
