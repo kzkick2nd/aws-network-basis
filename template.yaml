@@ -1,30 +1,49 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: 2010-09-09
 Description: aws-network-basis cfn tutorial.
+Parameters:
+  VpcCIDRRange:
+    Description: The CIDR range for this VPC. (x.x.0.0/16)
+    Type: String
+    Default: 10.0
+  DBAdmin:
+    Description: The database admin account id.
+    Type: String
+    MinLength: 1
+    MaxLength: 41
+    AllowedPattern: ^[a-zA-Z0-9]*$
+  DBPassword:
+    NoEcho: true
+    Description: The database admin account password.
+    Type: String
+    MinLength: 1
+    MaxLength: 41
+    AllowedPattern: ^[a-zA-Z0-9]*$
+
 Resources:
   # 第二章
   MyVPC:
     Type: AWS::EC2::VPC
     Properties:
-      CidrBlock: 10.0.0.0/16
+      CidrBlock: !Sub ${VpcCIDRRange}.0.0/16
       EnableDnsHostnames: true
       Tags:
-        - Key: "Name"
-          Value: "MyVPC"
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-MyVPC
   MyPublicSubnet:
     Type: AWS::EC2::Subnet
     Properties:
-      CidrBlock: 10.0.1.0/24
+      CidrBlock: !Sub ${VpcCIDRRange}.1.0/24
       VpcId: !Ref MyVPC
       AvailabilityZone: ap-northeast-1d
       Tags:
-        - Key: "Name"
-          Value: "MyPublicSubnet"
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-MyPublicSubnet
   MyGateway:
     Type: AWS::EC2::InternetGateway
     Properties:
       Tags:
-        - Key: "Name"
-          Value: "MyInternetGateway"
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-MyInternetGateway
   AttachGateway:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
@@ -35,25 +54,25 @@ Resources:
     Properties:
       VpcId: !Ref MyVPC
       Tags:
-        - Key: "Name"
-          Value: "MyRouteTable"
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-MyRouteTable
   MyRoute:
-    Type: "AWS::EC2::Route"
+    Type: AWS::EC2::Route
     DependsOn: AttachGateway
     Properties:
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId: !Ref MyGateway
       RouteTableId: !Ref MyRouteTable
   MySubnetRouteTableAssociation:
-    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId: !Ref MyRouteTable
       SubnetId: !Ref MyPublicSubnet
   # 第三章
   MySecurityGroup:
-    Type: "AWS::EC2::SecurityGroup"
+    Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupName: "WEB-SG"
+      GroupName: !Sub ${AWS::StackName}-WEB-SG
       GroupDescription: "aws-network-basis SecurityGroup"
       SecurityGroupIngress:
         - CidrIp: 0.0.0.0/0
@@ -79,28 +98,28 @@ Resources:
           ToPort: -1
       VpcId: !Ref MyVPC
   MyInstance:
-    Type: "AWS::EC2::Instance"
+    Type: AWS::EC2::Instance
     Properties:
-      ImageId: "ami-0a2de1c3b415889d2"
-      InstanceType: "t2.micro"
-      KeyName: "MyKeypair"
+      ImageId: ami-0a2de1c3b415889d2
+      InstanceType: t2.micro
+      KeyName: "MyKeypair" # 要事前作成
       AvailabilityZone: ap-northeast-1d
       NetworkInterfaces:
         - AssociatePublicIpAddress: true
           DeviceIndex: "0"
           DeleteOnTermination: true
-          PrivateIpAddress: 10.0.1.10
+          PrivateIpAddress: !Sub ${VpcCIDRRange}.1.10
           SubnetId: !Ref MyPublicSubnet
           GroupSet:
             - !Ref MySecurityGroup
       BlockDeviceMappings:
-        - DeviceName: "/dev/xvda"
+        - DeviceName: /dev/xvda
           Ebs:
-            VolumeType: "standard"
+            VolumeType: standard
             VolumeSize: 8
       Tags:
         - Key: Name
-          Value: "Web Server"
+          Value: !Sub ${AWS::StackName}-Web Server
       # 第四章 Metadata 内容をインストールするらしい
       UserData:
         Fn::Base64:
@@ -137,59 +156,60 @@ Resources:
     Properties:
       InstanceId: !Ref MyInstance
       Domain: vpc
+      # EIPのTagはつけられないらしい
 
   # 第六章 プライベートサブネット
   MyPrivateSubnet:
     Type: AWS::EC2::Subnet
     Properties:
-      CidrBlock: 10.0.2.0/24
+      CidrBlock: !Sub ${VpcCIDRRange}.2.0/24
       VpcId: !Ref MyVPC
       AvailabilityZone: ap-northeast-1d
       Tags:
-        - Key: "Name"
-          Value: "MyPrivateSubnet"
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-MyPrivateSubnet
   MyPrivateInstance:
-    Type: "AWS::EC2::Instance"
+    Type: AWS::EC2::Instance
     Properties:
-      ImageId: "ami-0a2de1c3b415889d2"
-      InstanceType: "t2.micro"
-      KeyName: "MyKeypair"
+      ImageId: ami-0a2de1c3b415889d2
+      InstanceType: t2.micro
+      KeyName: MyKeypair
       AvailabilityZone: ap-northeast-1d
       NetworkInterfaces:
         - AssociatePublicIpAddress: false
           DeviceIndex: "0"
           DeleteOnTermination: true
-          PrivateIpAddress: 10.0.2.10
+          PrivateIpAddress: !Sub ${VpcCIDRRange}.2.10
           SubnetId: !Ref MyPrivateSubnet
           GroupSet:
             - !Ref MyPrivateSecurityGroup
       BlockDeviceMappings:
-        - DeviceName: "/dev/xvda"
+        - DeviceName: /dev/xvda
           Ebs:
-            VolumeType: "standard"
+            VolumeType: standard
             VolumeSize: 8
       Tags:
         - Key: Name
-          Value: "DB Server"
+          Value: !Sub ${AWS::StackName}-DB Server
   MyPrivateSecurityGroup:
-    Type: "AWS::EC2::SecurityGroup"
+    Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupName: "DB-SG"
+      GroupName: !Sub ${AWS::StackName}-DB-SG
       GroupDescription: "aws-network-basis DB SecurityGroup"
       SecurityGroupIngress:
         - CidrIp: 0.0.0.0/0
-          Description: "SSH"
-          IpProtocol: "tcp"
+          Description: SSH
+          IpProtocol: tcp
           FromPort: 22
           ToPort: 22
-        - CidrIp: 0.0.0.0/0
-          Description: "RDBMS"
-          IpProtocol: "tcp"
+        - SourceSecurityGroupId: !Ref MySecurityGroup
+          Description: RDBMS
+          IpProtocol: tcp
           FromPort: 3306
           ToPort: 3306
         - CidrIp: 0.0.0.0/0
-          Description: "ICMP"
-          IpProtocol: "icmp"
+          Description: ICMP
+          IpProtocol: icmp
           FromPort: -1
           ToPort: -1
       VpcId: !Ref MyVPC
@@ -200,17 +220,17 @@ Resources:
     Properties:
       VpcId: !Ref MyVPC
       Tags:
-        - Key: "Name"
-          Value: "MyPrivateRouteTable"
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-MyPrivateRouteTable
   MyPrivateRoute:
     DependsOn: AttachGateway
-    Type: "AWS::EC2::Route"
+    Type: AWS::EC2::Route
     Properties:
       DestinationCidrBlock: 0.0.0.0/0
       NatGatewayId: !Ref MyNAT
       RouteTableId: !Ref MyPrivateRouteTable
   MyPrivateSubnetRouteTableAssociation:
-    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId: !Ref MyPrivateRouteTable
       SubnetId: !Ref MyPrivateSubnet
@@ -228,4 +248,47 @@ Resources:
       SubnetId: !Ref MyPublicSubnet
       Tags:
         - Key: Name
-          Value: MyNAT
+          Value: !Sub ${AWS::StackName}-MyNAT
+
+  # 第八章改 VPC 内に RDS を組み込む
+  MyDBSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: !Sub ${VpcCIDRRange}.3.0/24
+      VpcId: !Ref MyVPC
+      AvailabilityZone: ap-northeast-1a
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-MyDBSubnet1
+  MyDBSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: !Sub ${VpcCIDRRange}.4.0/24
+      VpcId: !Ref MyVPC
+      AvailabilityZone: ap-northeast-1d
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-MyDBSubnet2
+  MyDBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupName: !Sub ${AWS::StackName}-MyDBSubnet
+      DBSubnetGroupDescription: description
+      SubnetIds:
+        - !Ref MyDBSubnet1
+        - !Ref MyDBSubnet2
+  MyDB:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBName: !Sub ${AWS::StackName}MyRDS # 英数のみ注意
+      DBInstanceIdentifier: !Sub ${AWS::StackName}-myrds
+      AllocatedStorage: '20'
+      DBInstanceClass: db.t2.micro
+      Engine: MySQL
+      MasterUsername: !Ref DBAdmin
+      MasterUserPassword: !Ref DBPassword
+      DBSubnetGroupName: !Ref MyDBSubnetGroup
+      VPCSecurityGroups:
+        - !GetAtt
+          [ MyPrivateSecurityGroup, GroupId]
+    # DeletionPolicy: Snapshot # スナップショット注意

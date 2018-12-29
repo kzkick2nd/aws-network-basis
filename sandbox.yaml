@@ -1,0 +1,128 @@
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  HostedZone:
+    Default: ''
+    Description: The alternative domain name of this distribution.
+    Type: String
+Resources:
+  IAMAdmin:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: Admin
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+  IAMS3:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: S3Access
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+  MyS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: cfn-bucket-sample
+  BastionInstance:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      ImageId: ami-0a2de1c3b415889d2
+      InstanceType: t2.micro
+      KeyName: MyKeypair
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: true
+          DeviceIndex: '0'
+          DeleteOnTermination: true
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeType: standard
+            VolumeSize: 8
+  BastionInstanceEIP:
+    Type: 'AWS::EC2::EIP'
+    Properties:
+      Domain: vpc
+      InstanceId: !Ref BastionInstance
+  DNS:
+    Type: "AWS::Route53::HostedZone"
+    Properties:
+      Name: !Ref HostedZone
+  BastionDNSRecord:
+    Type: 'AWS::Route53::RecordSet'
+    Properties:
+      HostedZoneName: !Join
+        - ''
+        - - !Ref HostedZone
+          - .
+      Comment: A record for the Bastion instance.
+      Name: !Join
+        - ''
+        - - bastion.
+          - !Ref HostedZone
+          - .
+      Type: A
+      TTL: '300'
+      ResourceRecords:
+        - !Ref BastionInstanceEIP
+  BastionLocalDNSRecord:
+    Type: 'AWS::Route53::RecordSet'
+    Properties:
+      HostedZoneName: !Join
+        - ''
+        - - !Ref HostedZone
+          - .
+      Comment: A record for the private IP address of Bastion instance.
+      Name: !Join
+        - ''
+        - - bastion.local.
+          - !Ref HostedZone
+          - .
+      Type: A
+      TTL: '300'
+      ResourceRecords:
+        - !GetAtt
+          - BastionInstance
+          - PrivateIp
+  ElasticLoadBalancer:
+    Type: 'AWS::ElasticLoadBalancing::LoadBalancer'
+    Properties:
+      AvailabilityZones:
+        Fn::GetAZs: ''
+      Instances:
+      - Ref: BastionInstance
+      Listeners:
+      - LoadBalancerPort: '80'
+        InstancePort: '80'
+        Protocol: HTTP
+      # - LoadBalancerPort: '443'
+      #   InstancePort: '80'
+      #   Protocol: HTTPS
+      #   SSLCertificateId: !Ref ACMCertificate
+  LoadBalancerDNSRecord:
+    Type: 'AWS::Route53::RecordSet'
+    Properties:
+      HostedZoneName: !Join
+        - ''
+        - - !Ref HostedZone
+          - .
+      Comment: ALIAS targeted to LoadBalancer.
+      Name: !Join
+        - ''
+        - - elb.
+          - !Ref HostedZone
+          - .
+      Type: A
+      AliasTarget:
+        HostedZoneId: !GetAtt ElasticLoadBalancer.CanonicalHostedZoneNameID
+        DNSName: !GetAtt ElasticLoadBalancer.DNSName
+  # ACMCertificate:
+  #   Type: AWS::CertificateManager::Certificate
+  #   Properties:
+  #     DomainName: !Ref HostedZone
+  #     SubjectAlternativeNames:
+  #       - !Sub '*.${HostedZone}'
+  #     DomainValidationOptions:
+  #       - DomainName: !Ref HostedZone
+  #         ValidationDomain: !Ref 'HostedZone'
+  #     Tags:
+  #       - Key: Name
+  #         Value: !Sub '${HostedZone}-20181228'
+  #     ValidationMethod: DNS
